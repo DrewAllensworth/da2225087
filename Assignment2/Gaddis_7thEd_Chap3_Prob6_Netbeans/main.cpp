@@ -32,11 +32,15 @@ int main(int argc, char** argv) {
     //perform calculations
     nWidg = pWt / lbWidg;
     
-    cout << static_cast<float>(nWidg) << endl;
-    cout << static_cast<int>(nWidg) <<endl;
+    //tests
+//    cout << static_cast<float>(nWidg) << endl;
+//    cout << static_cast<int>(nWidg) <<endl;
+    
     //Output based on if n widgets is an whole number
-    //error for pWt 616.4
-    if (nWidg  == static_cast<int>(nWidg))
+    
+//    if (nWidg == static_cast<int>(nWidg))
+//    error for pWt 128.8
+    if (static_cast<int>(nWidg + 0.999999) == static_cast<int>(nWidg))
         cout << "The number of widgets on the pallet is: "
                 << nWidg;
     else 
