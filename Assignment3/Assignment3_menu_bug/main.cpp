@@ -34,7 +34,7 @@ void prob25();
 
 int main(int argc, char** argv) {
     //declare variables
-    int choice;
+    char choice;
     //display menu
     //Header
     cout <<"    ~ Assignment 3 Main Menu ~\n" 
