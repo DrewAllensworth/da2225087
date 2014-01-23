@@ -22,7 +22,7 @@ using namespace std;
 int main(int argc, char** argv) {
     //declare variables 
     const int CNV_DLR_CENTS=100;
-    unsigned long long salary,
+    float salary,
                   pay=0;
     int days;//number of days worked
 //get days and validate >= 1 
@@ -41,19 +41,11 @@ int main(int argc, char** argv) {
     //calculate salary and pay for each day
     salary=1;
     for(int count=1;count<=days;count++){
-        if (salary>1){
-            salary*=2;
-            pay+=salary;
-            cout <<"Salary for day " <<count <<": $"
+        cout <<"Salary for day " <<count <<": $"
                     <<static_cast<double>(salary)/CNV_DLR_CENTS
                     <<endl;
-        }else{
-            pay+=salary;
-            cout <<"Salary for day " <<count <<": $"
-                    <<static_cast<double>(salary)/CNV_DLR_CENTS
-                    <<endl;
-            salary++;
-        }
+        pay+=salary;
+        salary*=2;
     }
     //output total pay
     cout <<"-------------------------------------" <<endl;
