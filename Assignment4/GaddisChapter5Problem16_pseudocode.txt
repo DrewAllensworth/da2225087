@@ -1,0 +1,32 @@
+Pseudocode for Gaddis Chapter 5 Problem 16
+
+Calculate savings account ballance:
+
+Get interest rate
+Calculate annual interest rate
+	annual interest rate = interest rate/100
+Calculate monthly interest rate
+	monthly interest rate = annual interest rate/12.0
+Get the starting balance
+	balance = starting balance
+Get number of months since the account was established
+
+for number of months since the account was established
+	Get amount of deposits (validate: no negative numbers)
+	total deposits=total depostits + deposits
+	balance=ballance+deposits
+	Get amount of withdrawals (validate: no negative numbers) 
+	total withdrawals=total withdrawals + withdrawals
+	balance=balance-withdrawals
+	//calculate month's interest earned
+	month's interest=(balance*annual interest rate)
+	//calculate total interest
+	total interest=total interest + month's interest
+	//add interest
+	balance=balance + month's interest
+	if bal<0 then print error message and terminate loop
+
+Output ending balance
+output total deposits
+Output total withdrawals
+output total interest earned

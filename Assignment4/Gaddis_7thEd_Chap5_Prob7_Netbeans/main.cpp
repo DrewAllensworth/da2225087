@@ -42,7 +42,7 @@ int main(int argc, char** argv) {
     salary=1;
     for(int count=1;count<=days;count++){
         cout <<"Salary for day " <<count <<": $"
-                    <<static_cast<double>(salary)/CNV_DLR_CENTS
+                    <<static_cast<float>(salary)/CNV_DLR_CENTS
                     <<endl;
         pay+=salary;
         salary*=2;
@@ -50,7 +50,7 @@ int main(int argc, char** argv) {
     //output total pay
     cout <<"-------------------------------------" <<endl;
     cout <<"Total Pay for " <<days <<" days: $" 
-            <<static_cast<float>(pay)/CNV_DLR_CENTS;
+            <<static_cast<float>(pay)/CNV_DLR_CENTS <<endl;
     //exit stage right
     return 0;
 }
