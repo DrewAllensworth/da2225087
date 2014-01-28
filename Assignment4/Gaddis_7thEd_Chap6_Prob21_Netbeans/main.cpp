@@ -18,21 +18,7 @@ using namespace std;
 
 //Function Prototypes
 bool isPrime(unsigned int divend);
-/*
- * Parameters: divend-> A positive integer > 0 
- *  isPrime() calculates whether a number is prime
- *  the function calls isRemain() to determine if there is a 
- *  remainder after division
- * Output: bool-> true if number is prime, else returns false
- */
 bool isRemain(unsigned int divend, unsigned int divis);
-/*
- * Parameters: divend-> A positive integer serving as the dividend
- * divis-> A positive integer serving as the divisor
- *  isRemain() determines whether there is a remainder after dividing
- *  the dividend by the divisor.
- * Output: bool-> true if there is a remainder after division, else false 
- */
 
 //Execution Begins Here!
 
@@ -56,7 +42,13 @@ int main(int argc, char** argv) {
     //exit stage right
     return 0;
 }
-
+/*
+ * Parameters: divend-> A positive integer > 0 
+ *  isPrime() calculates whether a number is prime
+ *  the function calls isRemain() to determine if there is a 
+ *  remainder after division
+ * Output: bool-> true if number is prime, else returns false
+ */
 bool isPrime(unsigned int divend){
     //declare variables
     bool prime;
@@ -74,7 +66,13 @@ bool isPrime(unsigned int divend){
     }
     return true;
 }
-
+/*
+ * Parameters: divend-> A positive integer serving as the dividend
+ * divis-> A positive integer serving as the divisor
+ *  isRemain() determines whether there is a remainder after dividing
+ *  the dividend by the divisor.
+ * Output: bool-> true if there is a remainder after division, else false 
+ */
 bool isRemain(unsigned int divend, unsigned int divis){
     if (divend%divis==0){
         return false;

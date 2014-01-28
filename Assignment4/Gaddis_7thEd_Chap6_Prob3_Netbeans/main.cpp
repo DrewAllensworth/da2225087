@@ -19,22 +19,7 @@ using namespace std;
 
 //Function Prototypes
 float getSales(string name);
-/*
- *Parameters: name->The name of the sales division
- * getSales() asks the user for for the quarterly sales in dollars.
- * It validates that the sales are greater than or equal to zero, 
- * looping until a valid value is entered.
- *Output: Quarterly Sales in dollars as float.
- */
 void findHighest(float nWest, float nEast, float sWest, float sEast);
-/*
- *Parameters: Four floating point sales numbers for the four sales divisions
- * findHighest() takes in the sales for the four sales divisions and 
- * determines which number is greatest. The corresponding sales division
- * name is printed out.
- *Output: The name of the sales division with the highest sales
- */
-
 //Execution Begins Here!
 
 int main(int argc, char** argv) {
@@ -62,7 +47,13 @@ int main(int argc, char** argv) {
     //exit stage right
     return 0;
 }
-
+/*
+ *Parameters: name->The name of the sales division
+ * getSales() asks the user for for the quarterly sales in dollars.
+ * It validates that the sales are greater than or equal to zero, 
+ * looping until a valid value is entered.
+ *Output: Quarterly Sales in dollars as float.
+ */
 float getSales(string name){
     //Declare variables
     float sales;
@@ -78,7 +69,13 @@ float getSales(string name){
     }
     return sales;
 }
-
+/*
+ *Parameters: Four floating point sales numbers for the four sales divisions
+ * findHighest() takes in the sales for the four sales divisions and 
+ * determines which number is greatest. The corresponding sales division
+ * name is printed out.
+ *Output: The name of the sales division with the highest sales
+ */
 void findHighest(float nWest, float nEast, float sWest, float sEast){
     //header
     cout<<"--------------------------------------------" <<endl;

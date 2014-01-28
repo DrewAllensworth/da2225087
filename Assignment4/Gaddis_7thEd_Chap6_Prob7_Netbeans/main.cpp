@@ -17,11 +17,6 @@ using namespace std;
 
 //Function Prototypes
 float celsius(int temp);
-/*Parameters: temp->the temperature in degrees Fahrenheit 
- * celsius() takes a temperature in degrees Fahrenheit and converts it 
- * to degrees celsius
- *Output: float->temperature in degrees celsius
- */
 
 //Execution Begins Here!
 
@@ -39,7 +34,11 @@ int main(int argc, char** argv) {
     }
     return 0;
 }
-
+/*Parameters: temp->the temperature in degrees Fahrenheit 
+ * celsius() takes a temperature in degrees Fahrenheit and converts it 
+ * to degrees celsius
+ *Output: float->temperature in degrees celsius
+ */
 float celsius(int temp){
     //return temperature converted to Celsius
     return (5.0/9.0)*(temp-32);
