@@ -33,25 +33,47 @@ void cpyVcAr(const vector<short> &,short[],int size=4);//hands have four cards
 void cpyArry(short[],short[],int);
 void addUpCd(short[],short,int);
 void selSort(short[],int);
-void cnvHand(const card[],card[],short[],const vector<short> &,const short,const int size5=5);
+void cnvHand(const card[],card[],short[],const vector<short> &,const short,
+                const int size5=5);
+void cnvSHnd(const card[],card[],short[],const vector<short> &,
+                const int size4=4);
+void cnvCard(const card[],card &,const short);
+void scrPrs(const short [10][2],const card [],int &);
+void scr15s(const short [10][2],const short [10][3],const short [5][4],
+                const card[],int &);
+void scrRns(const short [10][3],const short [5][4],const card[],int &);
+void scrFlsh(const card[],const card[],int &,const int size5=5);
+void scrNbs(const card[],const card,int &,const int size4=4);
+void dsCdHnd(const card[],const int);
+void scrHand(const short [10][2],const short [10][3],const short [5][4],
+                const card[],const card[],const card,int &,const int size=5);
 //Execution Begins Here!
 
 int main(int argc, char** argv) {
     //dummy vectors for testing
     vector<short> tstHndP;
-    tstHndP.push_back(31);
-    tstHndP.push_back(3);
-    tstHndP.push_back(17);
-    tstHndP.push_back(1);
+    tstHndP.push_back(12);
+    tstHndP.push_back(8);
+    tstHndP.push_back(5);
+    tstHndP.push_back(4);
     vector<short> tstHndC;
-    tstHndC.push_back(30);
-    tstHndC.push_back(5);
+    tstHndC.push_back(29);
+    tstHndC.push_back(7);
     tstHndC.push_back(15);
-    tstHndC.push_back(0);
+    tstHndC.push_back(6);
+    vector<short> tstCrib;
+    tstCrib.push_back(23);
+    tstCrib.push_back(3);
+    tstCrib.push_back(19);
+    tstCrib.push_back(36);
     //dummy starter card
-    short starter=42;
+    short starter=16;
     //dummy dealer
     char dealer='P';
+    //dummy points
+    int pointsP=1000;
+    int pointsC=1000;
+    int pointsK=1000;//K for "kitty" or, if you prefer "krib"
     //END DUMMY VALS
     //Declare constant variables
     const int DK_SIZE=52;//The size of the deck
@@ -72,7 +94,8 @@ int main(int argc, char** argv) {
     const short sets_3[ROWS_10][COLS_3]={{0,1,2},{0,1,3},//2D array to hold all                             {0,2,3},{1,2,3},
                             {0,1,4},{0,2,4},//possible card combinations of 
                             {1,2,4},{0,3,4},//three cards. Used for scoring 
-                            {1,3,4},{2,3,4}};//hands
+                            {1,3,4},{2,3,4},//hands
+                            {0,2,3},{1,2,3}};
     const short sets_4[ROWS_5][COLS_4]={{0,1,2,3},
                                 {0,1,2,4},
                                 {0,1,3,4},
@@ -82,12 +105,18 @@ int main(int argc, char** argv) {
     short upCard=starter;//sets Up Card
     //Declare arrays 
     card crdDeck[DK_SIZE];
-    card handP[HND_SZ5];
-    card handC[HND_SZ5];
-    card crib[HND_SZ5];
+    card handP[HND_SZ5];//hand with up card
+    card handC[HND_SZ5];//hand with up card
+    card crib[HND_SZ5];//hand with up card
+    card sHndP[HND_SZ4];//hand without up card
+    card sHndC[HND_SZ4];//hand without up card
+    card sCrb[HND_SZ4];//hand without up card
     short arHandP[HND_SZ5];//Holds the sorted card ids for player's hand
     short arHandC[HND_SZ5];//Holds the sorted card ids for computer's hand
     short arCrib[HND_SZ5];//Holds the sorted card ids for crib
+    short arSHndP[HND_SZ4];//sorted card ids for player's hand without up card
+    short arSHndC[HND_SZ4];//sorted card ids for computer's hand w/o up card
+    short arSCrb[HND_SZ4];//sorted card ids for crib without up card
     //Character arrays for holding filenames
     char fnIds[]="./ids.txt";
     char fnRanks[]="./ranks.txt";
@@ -96,8 +125,40 @@ int main(int argc, char** argv) {
     char fnVals[]="./vals.txt";
     //Fill the crdDeck array
     flCrdDk(crdDeck,DK_SIZE,fnIds,fnRanks,fnSuits,fnNames,fnVals);
-    //Convert hands
+    //Convert hands with up card
     cnvHand(crdDeck,handP,arHandP,tstHndP,upCard);
+    cnvHand(crdDeck,handC,arHandC,tstHndC,upCard);
+    cnvHand(crdDeck,crib,arCrib,tstCrib,upCard);
+    //convert hands without up card
+    cnvSHnd(crdDeck,sHndP,arSHndP,tstHndP);
+    cnvSHnd(crdDeck,sHndC,arSHndC,tstHndC);
+    cnvSHnd(crdDeck,sCrb,arCrib,tstCrib);
+    //fill the Up Card's members
+    card cdUpCrd;
+    cnvCard(crdDeck,cdUpCrd,upCard);
+    cout<<"Up Card: "<<cdUpCrd.name<<endl;
+    cout<<"---------------------------------------"<<endl;
+    cout<<"Player:"<<endl;
+    scrHand(sets_2,sets_3,sets_4,handP,sHndP,cdUpCrd,pointsP);
+    cout<<"Computer:"<<endl;
+    scrHand(sets_2,sets_3,sets_4,handC,sHndC,cdUpCrd,pointsC);
+    cout<<"Crib:"<<endl;
+    scrHand(sets_2,sets_3,sets_4,crib,sCrb,cdUpCrd,pointsK);
+//    //display the hand
+//    cout<<"Hand with Up Card: ";
+//    dsCdHnd(handP,HND_SZ5);
+//    //score pairs
+//    scrPrs(sets_2,handP,pointsP);
+//    //score 15s
+//    scr15s(sets_2,sets_3,sets_4,handP,pointsP);
+//    //score for a flush
+//    scrFlsh(handP,sHndP,pointsP);
+//    //score nibs
+//    scrNbs(sHndP,cdUpCrd,pointsP);
+//    //score runs
+//    scrRns(sets_3,sets_4,handP,pointsP);
+    //output points
+//    cout<<"Points: "<<pointsP<<endl;
 //    //convert hands
 //    cpyVcAr(tstHndP,arHandP,HND_SZ4);
 //    //add Up card
@@ -137,6 +198,229 @@ int main(int argc, char** argv) {
     return 0;
 }
 
+
+
+void scrHand(const short combi2[10][2],const short combi3[10][3],
+                const short combi4[5][4],const card lngHnd[],
+                const card shrtHnd[],const card cdUpCrd,int & points,
+                const int size){
+    //display the hand
+    cout<<"Hand with Up Card: ";
+    dsCdHnd(lngHnd,size);
+    //score pairs
+    scrPrs(combi2,lngHnd,points);
+    //score 15s
+    scr15s(combi2,combi3,combi4,lngHnd,points);
+    //score for a flush
+    scrFlsh(lngHnd,shrtHnd,points);
+    //score nibs
+    scrNbs(shrtHnd,cdUpCrd,points);
+    //score runs
+    scrRns(combi3,combi4,lngHnd,points);
+    //output points
+    cout<<"Points: "<<points<<endl;
+}
+
+void dsCdHnd(const card hand[],const int size){
+    //displays all the contents of a hand
+    for(int i=0;i<size;i++){
+        cout<<hand[i].name<<"  ";
+    }
+    cout<<endl;
+}
+
+void scrRns(const short combi3[10][3],const short combi4[5][4],
+                const card hand[],int &points){
+    bool rnFound=false;//used as a flag value to skip tests if larger runs
+                        //are found
+    //tests if all five cards are only one away from the next. The moment one
+    //card fails the tests move to the next test 
+    if((hand[1].rank)-(hand[0].rank)==1){
+        if((hand[2].rank)-(hand[1].rank)==1){
+            if((hand[3].rank)-(hand[2].rank)==1){
+                if((hand[4].rank)-(hand[3].rank)==1){
+                    //all cards passed the test
+                    //output the card names and assign +5000 points
+                    cout<<hand[0].name<<" & "<<hand[1].name<<" & "
+                        <<hand[2].name<<" & "<<hand[3].name<<" & "
+                        <<hand[4].name<<" = Run of five: +5000 points"
+                        <<endl;
+                    points+=5000;//give points
+                    rnFound=true;//set that a run of five was found.
+                                //Skip all other tests if true
+                }
+            }
+        }
+    }
+    if(!rnFound){
+        for(int i=0;i<5;i++){//iterate less than the size of the combi4 array
+            if((hand[combi4[i][1]].rank)-(hand[combi4[i][0]].rank)==1){
+                if((hand[combi4[i][2]].rank)-(hand[combi4[i][1]].rank)==1){
+                    if((hand[combi4[i][3]].rank)-(hand[combi4[i][2]].rank)==1){
+                        //all cards passed the test
+                        //output the card names and assign +4000 points
+                        cout<<hand[combi4[i][0]].name<<" & "
+                            <<hand[combi4[i][1]].name<<" & "
+                            <<hand[combi4[i][2]].name<<" & "
+                            <<hand[combi4[i][3]].name
+                            <<" = Run of four: +4000 points"
+                            <<endl;
+                        points+=4000;//give points
+                        rnFound=true;//set that a run of five was found.
+                                    //Skip all other tests if true
+                    }
+                }
+            }
+        }
+    }
+    if(!rnFound){
+        for(int i=0;i<10;i++){//iterate less than the size of the combi4 array
+            if((hand[combi3[i][1]].rank)-(hand[combi3[i][0]].rank)==1){
+                if((hand[combi3[i][2]].rank)-(hand[combi3[i][1]].rank)==1){
+                    //all cards passed the test
+                    //output the card names and assign +3000 points
+                    cout<<hand[combi3[i][0]].name<<" & "
+                        <<hand[combi3[i][1]].name<<" & "
+                        <<hand[combi3[i][2]].name
+                        <<" = Run of three: +3000 points"
+                        <<endl;
+                    points+=3000;//give points
+                    rnFound=true;//set that a run of five was found.
+                                //Skip all other tests if true
+                }
+            }
+        }
+    }
+}
+
+void cnvCard(const card crdDeck[],card &card,const short id){
+    //takes a card Id and fills a card structure element with the proper values
+    card.id=crdDeck[id].id;
+    card.rank=crdDeck[id].rank;
+    card.suit=crdDeck[id].suit;
+    card.name=crdDeck[id].name;
+    card.val=crdDeck[id].val;
+}
+
+void scrNbs(const card shrtHnd[],const card cdUpCrd,int &points,
+                const int size4){
+    if(cdUpCrd.rank==11){
+        for(int i=0;i<size4;i++){
+            if(shrtHnd[i].rank==cdUpCrd.rank){
+                cout<<shrtHnd[i].name<<" makes nibs: +1000 points"<<endl;
+            }
+        }
+    }
+}
+
+void scrFlsh(const card hand[],const card shrtHnd[],int &points, 
+                const int size5){
+    int cnt=0;//count to hold how many card have the same suit
+    for(int i=0;i<size5;i++){
+        if(hand[0].suit==hand[i].suit)cnt++;//increments ctr for each match
+    }
+    if(cnt==5){
+        cout<<"Flush of all five cards: +5000 points"<<endl;
+        points+=5000;        
+    }
+    //if all the cards in the hand except for the up card are the same suit
+    //then +4000 points
+    if(cnt==4){
+        int nCnt=0;
+        for(int i=0;i<4;i++){//4 = go through the hand w/o the up card
+        //increments nCtr for each suit match without including up card 
+        if(shrtHnd[0].suit==shrtHnd[i].suit)nCnt++;
+        }
+        if(nCnt==4){
+        cout<<"Flush of all four hand cards: +4000 points"<<endl;
+        points+=4000;        
+        }
+    }
+}
+
+void scr15s(const short combi2[10][2],const short combi3[10][3],
+                const short combi4[5][4],const card hand[],int &points){
+    //Go through hand looking for combinations of two cards which add to 15
+    for(int i=0;i<10;i++){//goes through const combi2 2D array with 10 rows
+        //and two columns. Compares ten combinations of two cards.
+        //uses values in card combinations array to check hand for 15s 
+        if((hand[combi2[i][0]].val)+(hand[combi2[i][1]].val)==15){
+            //if true, print out names and add 2000 point to points total
+            cout<<hand[combi2[i][0]].name<<" + "<<hand[combi2[i][1]].name
+                    <<" = 15: +2000 points"<<endl;
+            points+=2000;
+        }
+    }
+    //Go through hand looking for combinations of three cards which add to 15
+    for(int i=0;i<10;i++){//goes through const combi3 2D array with 10 rows
+        //and three columns. Compares ten combinations of three cards.
+        //uses values in card combinations array to check hand for 15s 
+        if((hand[combi3[i][0]].val)+(hand[combi3[i][1]].val)+
+                (hand[combi3[i][2]].val)==15){
+            //if true, print out names and add 2000 point to points total
+            cout<<hand[combi3[i][0]].name<<" + "<<hand[combi3[i][1]].name
+                    <<" + "<<hand[combi3[i][2]].name<<" = 15: +2000 points"
+                        <<endl;
+            points+=2000;
+        }
+    }
+    //Go through hand looking for combinations of four cards which add to 15
+    for(int i=0;i<5;i++){//goes through const combi3 2D array with 5 rows
+        //and four columns. Compares five combinations of four cards.
+        //uses values in card combinations array to check hand for 15s 
+        if((hand[combi4[i][0]].val)+(hand[combi4[i][1]].val)+
+                (hand[combi4[i][2]].val)+(hand[combi4[i][3]].val)==15){
+            //if true, print out names and add 2000 point to points total
+            cout<<hand[combi4[i][0]].name<<" + "<<hand[combi4[i][1]].name
+                    <<" + "<<hand[combi4[i][2]].name<<" + "
+                    <<hand[combi4[i][3]].name<<" = 15: +2000 points"<<endl;
+            points+=2000;
+        }
+    }
+    //Trivial case: checks if all five cards add up to 15. If so, +2000 points
+    if((hand[0].val)+(hand[1].val)+(hand[2].val)+(hand[3].val)
+            +(hand[4].val)==15){
+        //if true, print out names and add 2000 point to points total
+        cout<<hand[0].name<<" + "<<hand[1].name<<" + "<<hand[2].name<<" + "
+                <<hand[3].name<<" + "<<hand[4].name<<" = 15: +2000 points"
+                        <<endl;
+    }
+}
+
+void scrPrs(const short combi[10][2],const card hand[],int &points){
+    for(int i=0;i<10;i++){//goes through const combi 2D array with 10 rows
+        //uses values in card combinations array to check hand for pairs 
+        if(hand[combi[i][0]].rank==hand[combi[i][1]].rank){
+            cout<<hand[combi[i][0]].name<<" & "<<hand[combi[i][1]].name
+                    <<" = A Pair: +2000 points"<<endl;
+            points+=2000;
+        }
+    }
+}
+
+//creates a "Small" 4 card hand without the up card
+void cnvSHnd(const card crdDeck[],card crdSHnd[],short arHnd[],
+                const vector<short> &vcHnd,const int size4){
+    //Declare variables
+    short srtArry[size4];
+    //convert hands
+    cpyVcAr(vcHnd,arHnd);
+    //Copy hand array for sorting
+    cpyArry(arHnd,srtArry,size4);
+    //Sort the hand copy in ascending order
+    selSort(srtArry,size4);
+    //Copy and add values to members of card hand 
+    for(int i=0;i<size4;i++){
+        crdSHnd[i].id=crdDeck[srtArry[i]].id;
+        crdSHnd[i].rank=crdDeck[srtArry[i]].rank;
+        crdSHnd[i].suit=crdDeck[srtArry[i]].suit;
+        crdSHnd[i].name=crdDeck[srtArry[i]].name;
+        crdSHnd[i].val=crdDeck[srtArry[i]].val;
+    }
+}
+
+
+//creates a five card hand with the up card added
 void cnvHand(const card crdDeck[],card crdHand[],short arHnd[],
                 const vector<short> &vcHnd,const short upCard,const int size5){
     //Declare variables
@@ -145,16 +429,10 @@ void cnvHand(const card crdDeck[],card crdHand[],short arHnd[],
     cpyVcAr(vcHnd,arHnd);
     //add the Up card
     addUpCd(arHnd,upCard,size5);
-    for(int i=0;i<size5;i++){
-        cout<<arHnd[i]<<endl;
-    }
     //Copy hand array for sorting
     cpyArry(arHnd,srtArry,size5);
     //Sort the hand copy in ascending order
     selSort(srtArry,size5);
-    for(int i=0;i<size5;i++){
-        cout<<srtArry[i]<<endl;
-    }
     //Copy and add values to members of card hand 
     for(int i=0;i<size5;i++){
         crdHand[i].id=crdDeck[srtArry[i]].id;
@@ -162,17 +440,18 @@ void cnvHand(const card crdDeck[],card crdHand[],short arHnd[],
         crdHand[i].suit=crdDeck[srtArry[i]].suit;
         crdHand[i].name=crdDeck[srtArry[i]].name;
         crdHand[i].val=crdDeck[srtArry[i]].val;
-        cout<<crdHand[i].id<<" "<<crdHand[i].name<<" "<<crdHand[i].val<<endl;
     }
 }
 
 void cpyArry(short a[],short b[],const int size){
+    //copies one array to another
     for(int i=0;i<size;i++){
         b[i]=a[i];
     }
 }
 
 void selSort(short a[], const int size){
+    //A selection sort for an array
     int strtScn, minVal, minIndx;
     for(strtScn=0;strtScn<size-1;strtScn++){
         minIndx=strtScn;
